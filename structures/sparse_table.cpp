@@ -1,0 +1,24 @@
+
+vector<vi> mkst(vi &v){
+  int n = v.size();
+  int k = log2(n) + 1;
+  vector<vi> st(k+1, vi(n, 0));
+
+  fir(n){
+    st[0][i] = v[i];
+  }
+
+  fir(k){
+    fjr(n-(1<<i)+1){
+      st[i+1][j] = min(st[i][j], st[i][j+(1<<i)]);
+    }
+  }
+  return st;
+}
+
+ll stgm(vector<vi> &st, int l, int r){
+  int i = log2(r-l+1);
+  ll mi = min(st[i][l], st[i][r-(1<<i)+1]);
+
+  return mi;
+}
