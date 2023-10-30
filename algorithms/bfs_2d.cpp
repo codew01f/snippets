@@ -20,7 +20,7 @@ void bfs(vector<vi> &q, int r, int c){
     auto [y, x]=call.front();
     call.pop(); cl--;
 
-    for(int d=0; d<4; d++){
+    for(int d=0; d<4; ++d){
       if(-1<y+dy[d] && y+dy[d]<row
       && -1<x+dx[d] && x+dx[d]<col){ //check !visited
         
