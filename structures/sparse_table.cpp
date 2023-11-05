@@ -15,7 +15,7 @@ grid mkst(vi &v){
   return st;
 }
 
-ll stgm(grid &st, int l, int r){
+ll stgm(grid &st, int l, int r){ //0 indexed;
   int i = log2(r-l+1);
   ll mi = min(st[i][l], st[i][r-(1<<i)+1]);
 
