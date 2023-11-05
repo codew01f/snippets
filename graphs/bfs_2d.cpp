@@ -2,13 +2,13 @@
 void bfs(vector<vi> &q, int r, int c){
   int row=q.size();
   int col=q[0].size();
-  queue<pii> call;
 
   ll lv=-1, cl=0, nl=1;
   
   vi dx={1, -1, 0, 0};
   vi dy={0, 0, -1, 1};
 
+  queue<pii> call;
   call.push({r, c});
   while(!call.empty()){
     if(!cl){
