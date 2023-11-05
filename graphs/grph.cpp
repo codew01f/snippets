@@ -2,12 +2,12 @@
 ll cn = 200000; //node count;
 ll ce = 200000; //edge count;
 
-grid edg1(cn+1, {}); //unweighted;
+grid edg1(cn+1, vi(0)) //unweighted;
 vector<vector<pi>> wedg(cn+1, {}); //weighted;
 
 void mkgph(grid &edg, ll ce){
   ll fr, to, wt;
-  while(ce--){
+  fir(ce){
     cin>>fr>>to;
     cin>>wt; //if weighted;
 
@@ -17,7 +17,6 @@ void mkgph(grid &edg, ll ce){
 
     //if weighted;
     edg[fr].push_back({to, wt});
-    
   }
   return; 
 }

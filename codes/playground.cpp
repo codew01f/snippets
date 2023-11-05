@@ -1,4 +1,5 @@
 
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -7,7 +8,7 @@ using vi = vector<long long>;
 using si = set<long long>;
 using pii = pair<long long, long long>;
 using mii = map<long long, long long>;
-using grid = vector<vector<ll>>;
+using grid = vector<vector<long long>>;
 
 #define gd(r, c, i) gd(r, vi(c, i))
 #define fix(p) cout<<setprecision(p)<<fixed
@@ -16,58 +17,61 @@ using grid = vector<vector<ll>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-grid gd(5,5,-1);
 
-void bfs(vector<vi> &q, int r, int c){
-  int row=q.size();
-  int col=q[0].size();
-  queue<pii> call;
+ll cn = 7; //node count;
+ll ce = 9; //edge count;
 
+grid edg1(cn+1, vi(0)); //unweighted;
+
+void mkgph(grid &edg, ll ce){
+  ll fr, to, wt;
+  fir(ce){
+    cin>>fr>>to;
+    //if unweighted;
+    edg[fr].push_back(to);
+    edg[to].push_back(fr); //if undirected;
+  }
+  return; 
+}
+vi vst1(cn+1, 0);
+vi prt1(cn+1, 0);
+
+void bfs(grid &edg, ll sn, vi &vst, vi &prt){
   ll lv=-1, cl=0, nl=1;
   
-  vi dx={1, -1, 0, 0};
-  vi dy={0, 0, -1, 1};
-
-  call.push({r, c});
+  queue<ll> call;
+  call.push(sn);
   while(!call.empty()){
+    
+    vst[sn]++;
     if(!cl){
       lv++;
       cl=nl;
       nl=0;
     }
-    
-    auto [y, x]=call.front();
+
+    int at=call.front();
     call.pop(); cl--;
-    q[y][x]=lv;
-    for(int d=0; d<4; d++){
-      if(-1<y+dy[d] && y+dy[d]<row
-      && -1<x+dx[d] && x+dx[d]<col
-      && q[y+dy[d]][x+dx[d]] == -1){ //check !visited
-        
-        if(1){
-          call.push({y+dy[d], x+dx[d]});
-          nl++;
-        }
+
+    for(ll to:edg[at]){
+      if(!vst[to]){
+
+        prt[to]=at;
+        call.push(to);
+        vst[to]++;
+        nl++;
       }
     }
   }
-  return;
 }
-
 
 void solve(){
-  gd = grid(5, vi(5, -1));
-  ll r, c; cin>>r>>c;
-
-  bfs(gd, r, c);
-  fir(5){
-    fjr(5){
-      cout<<gd[i][j]<<" ";
-    }
-    cout<<"\n";
+  mkgph(edg1, ce);
+  bfs(edg1, 1, vst1, prt1);
+  fir(cn+1){
+    cout<<"\nnode "<<i<<"par "<<prt1[i];
   }
 }
-
 
 int main(){
   ios_base::sync_with_stdio(0);

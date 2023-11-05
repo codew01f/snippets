@@ -17,7 +17,7 @@ void stud(vi &v, int p, ll val){
   }
 }
 
-ll stgs(vi &v, int l, int r){
+ll stgs(vi &v, int l, int r){ //0 indexed;
   int n = v.size()/2;
   int res = 0;
 

@@ -10,6 +10,6 @@ vi mkps(vi &v){
   return res;
 }
 
-ll psgs(vi &ps, int l, int r){
+ll psgs(vi &ps, int l, int r){ //0 indexed;
   return ps[r+1]-ps[l];
 }
