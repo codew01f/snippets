@@ -1,5 +1,4 @@
 
-
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -31,35 +30,32 @@ grid mkgph(ll cn, ll ce){
   return edg; 
 }
 
-vi tsort(ll cn, ll ce, grid &edg){
+vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
   vi ts(cn, 0);
-  vi vst(cn+1, 0);
-  stack<int> call;
+  vi indg(cn+1, 0);
+  queue<ll> call;
 
-  ll cnt=cn;
+  for(vi v:edg){
+    for(ll to:v) indg[to]++;
+  }
   fir(cn){
-    if(vst[i+1]) continue;
-    call.push(i+1);
-    vst[i+1]++;
+    if(!indg[i+1]) call.push(i+1);
+  }
 
-    while(!call.empty()){
-      
-      ll at=call.top();
-      ll lf=1;
-      for(ll to:edg[at]){
-        if(vst[to]) continue;
-        call.push(to);
-        vst[to]++;
-        lf=0;
-      }
-      if(lf){
-        ts[--cnt]=at;
-        call.pop();
-      }
-    }  
+  ll id=0;
+  while(!call.empty()){
+    ll at=call.front();
+    call.pop();
+    ts[id++]=at;
+    
+    for(ll to:edg[at]){
+      indg[to]--;
+      if(!indg[to]) call.push(to);
+    }
   }
   return ts;
 }
+
 void solve(){
   grid edg1 = mkgph(cn, ce);
   vi tpsrt=tsort(cn, ce, edg1);
