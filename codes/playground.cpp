@@ -16,27 +16,25 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-ll cn=13, ce=18;
+ll cn=8, ce=13;
 
-grid mkgph(ll cn, ll ce){
-  grid edg(cn+1, vi(0)); 
+vector<vector<pii>> mkwgph(ll cn, ll ce){
+  vector<vector<pii>> edg(cn+1, vector<pii>(0));
 
-  ll fr, to;
+  ll fr, to, wt;
   fir(ce){
-    cin>>fr>>to;
-    edg[fr].push_back(to);
-//    edg[to].push_back(fr); //if undirected;
+    cin>>fr>>to>>wt;
+    edg[fr].push_back({to, wt});
   }
   return edg; 
 }
-
-vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
+vi wtsort(ll cn, ll ce, vector<vector<pii>> &edg){
   vi ts(cn, 0);
   vi indg(cn+1, 0);
   queue<ll> call;
 
-  for(vi v:edg){
-    for(ll to:v) indg[to]++;
+  for(auto v:edg){
+    for(auto[to, wt]:v) indg[to]++;
   }
   fir(cn){
     if(!indg[i+1]) call.push(i+1);
@@ -47,8 +45,8 @@ vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
     ll at=call.front();
     call.pop();
     ts[id++]=at;
-    
-    for(ll to:edg[at]){
+
+    for(auto [to, wt]:edg[at]){
       indg[to]--;
       if(!indg[to]) call.push(to);
     }
@@ -56,10 +54,28 @@ vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
   return ts;
 }
 
+vi sssd(ll cn, ll ce, ll s, vector<vector<pii>> &edg, vi &ts){
+  vi dis(cn+1, INT_MAX);
+  dis[s]=0;
+
+  ll idx=0;
+  while(ts[idx]!=s) idx++;
+  while(idx<cn){
+    ll at=ts[idx];
+    for(auto [to, wt]:edg[at]){
+      dis[to]=min(dis[to], dis[at]+wt);
+    }
+    idx++;
+  }
+  return dis;
+}
 void solve(){
-  grid edg1 = mkgph(cn, ce);
-  vi tpsrt=tsort(cn, ce, edg1);
-  for(ll i:tpsrt) cout<<i<<" ";
+  auto edg=mkwgph(cn, ce);
+  vi ts=wtsort(cn, ce, edg);
+  for(ll i:ts)cout<<i<<" ";
+  cout<<endl;
+  vi sd=sssd(cn, ce, 1, edg, ts);
+  for(ll i:sd)cout<<i<<" ";
   cout<<endl;
   return; 
 }

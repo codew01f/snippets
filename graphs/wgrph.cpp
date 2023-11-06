@@ -1,5 +1,5 @@
 
-vector<vector<pii>> mkgph(ll cn, ll ce){
+vector<vector<pii>> mkwgph(ll cn, ll ce){
   vector<vector<pii>> edg(cn+1, vector<pii>(0));
 
   ll fr, to, wt;
