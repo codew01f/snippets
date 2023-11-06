@@ -17,60 +17,55 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
+ll cn=13, ce=18;
 
-ll cn = 7; //node count;
-ll ce = 9; //edge count;
+grid mkgph(ll cn, ll ce){
+  grid edg(cn+1, vi(0)); 
 
-grid edg1(cn+1, vi(0)); //unweighted;
-
-void mkgph(grid &edg, ll ce){
-  ll fr, to, wt;
+  ll fr, to;
   fir(ce){
     cin>>fr>>to;
-    //if unweighted;
     edg[fr].push_back(to);
-    edg[to].push_back(fr); //if undirected;
+//    edg[to].push_back(fr); //if undirected;
   }
-  return; 
+  return edg; 
 }
-vi vst1(cn+1, 0);
-vi prt1(cn+1, 0);
 
-void bfs(grid &edg, ll sn, vi &vst, vi &prt){
-  ll lv=-1, cl=0, nl=1;
-  
-  queue<ll> call;
-  call.push(sn);
-  while(!call.empty()){
-    
-    vst[sn]++;
-    if(!cl){
-      lv++;
-      cl=nl;
-      nl=0;
-    }
+vi tsort(ll cn, ll ce, grid &edg){
+  vi ts(cn, 0);
+  vi vst(cn+1, 0);
+  stack<int> call;
 
-    int at=call.front();
-    call.pop(); cl--;
+  ll cnt=cn;
+  fir(cn){
+    if(vst[i+1]) continue;
+    call.push(i+1);
+    vst[i+1]++;
 
-    for(ll to:edg[at]){
-      if(!vst[to]){
-
-        prt[to]=at;
+    while(!call.empty()){
+      
+      ll at=call.top();
+      ll lf=1;
+      for(ll to:edg[at]){
+        if(vst[to]) continue;
         call.push(to);
         vst[to]++;
-        nl++;
+        lf=0;
       }
-    }
+      if(lf){
+        ts[--cnt]=at;
+        call.pop();
+      }
+    }  
   }
+  return ts;
 }
-
 void solve(){
-  mkgph(edg1, ce);
-  bfs(edg1, 1, vst1, prt1);
-  fir(cn+1){
-    cout<<"\nnode "<<i<<"par "<<prt1[i];
-  }
+  grid edg1 = mkgph(cn, ce);
+  vi tpsrt=tsort(cn, ce, edg1);
+  for(ll i:tpsrt) cout<<i<<" ";
+  cout<<endl;
+  return; 
 }
 
 int main(){
