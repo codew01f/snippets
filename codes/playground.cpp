@@ -16,7 +16,7 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-ll cn=8, ce=13;
+ll cn=6, ce=11;
 
 vector<vector<pii>> mkwgph(ll cn, ll ce){
   vector<vector<pii>> edg(cn+1, vector<pii>(0));
@@ -54,18 +54,25 @@ vi wtsort(ll cn, ll ce, vector<vector<pii>> &edg){
   return ts;
 }
 
-vi sssd(ll cn, ll ce, ll s, vector<vector<pii>> &edg, vi &ts){
+vi sssd(ll cn, ll ce, ll s, vector<vector<pii>> &edg){
   vi dis(cn+1, INT_MAX);
   dis[s]=0;
+  vi vst(cn+1, 0);
+  priority_queue<pii, vector<pii>, greater<pii>> call; //wt, id
 
-  ll idx=0;
-  while(ts[idx]!=s) idx++;
-  while(idx<cn){
-    ll at=ts[idx];
+  call.push({0, s});
+  while(!call.empty()){
+    auto [wt0, at]=call.top();
+    call.pop();
+    vst[at]++;
     for(auto [to, wt]:edg[at]){
-      dis[to]=min(dis[to], dis[at]+wt);
+      if(vst[to]) continue;
+      ll d=dis[at]+wt;
+      if(d<dis[to]){
+        dis[to]=d;
+        call.push({d, to});
+      }
     }
-    idx++;
   }
   return dis;
 }
@@ -74,7 +81,7 @@ void solve(){
   vi ts=wtsort(cn, ce, edg);
   for(ll i:ts)cout<<i<<" ";
   cout<<endl;
-  vi sd=sssd(cn, ce, 1, edg, ts);
+  vi sd=sssd(cn, ce, 1, edg);
   for(ll i:sd)cout<<i<<" ";
   cout<<endl;
   return; 
