@@ -1,6 +1,6 @@
 
 vi vst(cn+1, 0);
-vi prt(cn+1, 0);
+vi prt(cn+1, -1);
 
 void bfs(grid &edg, ll sn){
   ll lv=-1, cl=0, nl=1;
