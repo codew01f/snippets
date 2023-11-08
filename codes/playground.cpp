@@ -16,7 +16,7 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-ll cn=6, ce=11;
+ll cn=7, ce=12;
 
 vector<vector<pii>> mkwgph(ll cn, ll ce){
   vector<vector<pii>> edg(cn+1, vector<pii>(0));
@@ -25,64 +25,38 @@ vector<vector<pii>> mkwgph(ll cn, ll ce){
   fir(ce){
     cin>>fr>>to>>wt;
     edg[fr].push_back({to, wt});
+    edg[to].push_back({fr, wt});
   }
   return edg; 
 }
-vi wtsort(ll cn, ll ce, vector<vector<pii>> &edg){
-  vi ts(cn, 0);
-  vi indg(cn+1, 0);
-  queue<ll> call;
 
-  for(auto v:edg){
-    for(auto[to, wt]:v) indg[to]++;
-  }
-  fir(cn){
-    if(!indg[i+1]) call.push(i+1);
-  }
-
-  ll id=0;
-  while(!call.empty()){
-    ll at=call.front();
-    call.pop();
-    ts[id++]=at;
-
-    for(auto [to, wt]:edg[at]){
-      indg[to]--;
-      if(!indg[to]) call.push(to);
-    }
-  }
-  return ts;
-}
-
-vi sssd(ll cn, ll ce, ll s, vector<vector<pii>> &edg){
-  vi dis(cn+1, INT_MAX);
-  dis[s]=0;
+set<pii> mst(ll cn, ll ce, vector<vector<pii>> &edg){
+  set<pii> mst;
   vi vst(cn+1, 0);
-  priority_queue<pii, vector<pii>, greater<pii>> call; //wt, id
-
-  call.push({0, s});
+  priority_queue<pair<ll, pii>, vector<pair<ll, pii>>, greater<pair<ll, pii>>> call;
+  
+  for(auto [to, wt]:edg[1]){
+    call.push({wt, {1, to}});
+  }
+  vst[1]++;
   while(!call.empty()){
-    auto [wt0, at]=call.top();
+    auto [wt0, nd]=call.top();
+    auto [at0, to0]=nd;
     call.pop();
-    vst[at]++;
-    for(auto [to, wt]:edg[at]){
-      if(vst[to]) continue;
-      ll d=dis[at]+wt;
-      if(d<dis[to]){
-        dis[to]=d;
-        call.push({d, to});
-      }
+
+    if(vst[to0]) continue;
+    mst.insert({at0, to0});
+    vst[to0]++;
+    for(auto [to, wt]:edg[to0]){
+      if(!vst[to]) call.push({wt, {to0, to}});
     }
   }
-  return dis;
+  return mst;
 }
 void solve(){
   auto edg=mkwgph(cn, ce);
-  vi ts=wtsort(cn, ce, edg);
-  for(ll i:ts)cout<<i<<" ";
-  cout<<endl;
-  vi sd=sssd(cn, ce, 1, edg);
-  for(ll i:sd)cout<<i<<" ";
+  set<pii> mst1=mst(cn, ce, edg);
+  for(auto [x, y]:mst1) cout<<x<<" "<<y;
   cout<<endl;
   return; 
 }
