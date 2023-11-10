@@ -33,27 +33,26 @@ vector<vector<pii>> mkwgph(ll cn, ll ce){
 set<pii> mst(ll cn, ll ce, vector<vector<pii>> &edg){
   set<pii> mst;
   vi vst(cn+1, 0);
-  priority_queue<pair<ll, pii>, vector<pair<ll, pii>>, greater<pair<ll, pii>>> call;
-  
-  for(auto [to, wt]:edg[1]){
-    call.push({wt, {1, to}});
-  }
-  vst[1]++;
-  while(!call.empty()){
-    auto [wt0, nd]=call.top();
-    auto [at0, to0]=nd;
-    call.pop();
-
-    if(vst[to0]) continue;
-    mst.insert({at0, to0});
-    vst[to0]++;
-    for(auto [to, wt]:edg[to0]){
-      if(!vst[to]) call.push({wt, {to0, to}});
+  set<pair<ll, pii>> sedg;
+  fir(cn+1){
+    for(auto [to, wt]:edg[i]){
+      sedg.insert({wt, {i, to}});
     }
+  }
+ 
+  ll cms=0;
+  while(!sedg.empty() && cms<cn){
+    auto [fr, to]=sedg.begin()->second;
+    sedg.erase(sedg.begin());
+    if(vst[fr] && vst[to]) continue; 
+    vst[fr]|=1; vst[to]|=1;
+    mst.insert({fr, to});
+    cms++;
   }
   return mst;
 }
 void solve(){
+  cout<<"HI MOM!";
   auto edg=mkwgph(cn, ce);
   set<pii> mst1=mst(cn, ce, edg);
   for(auto [x, y]:mst1) cout<<x<<" "<<y;
@@ -62,6 +61,9 @@ void solve(){
 }
 
 int main(){
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+  
   ios_base::sync_with_stdio(0);
   cin.tie(0); cout.tie(0);
 

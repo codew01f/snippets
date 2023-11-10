@@ -19,7 +19,7 @@ void stud(vi &v, int p, ll val){
 
 ll stgs(vi &v, int l, int r){ //0 indexed;
   int n = v.size()/2;
-  int res = 0;
+  ll res = 0;
 
   for(l+=n, r+=n+1; l<r; l>>=1, r>>=1){
     if(l&1) res+=v[l++];
