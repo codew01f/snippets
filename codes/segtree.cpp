@@ -22,7 +22,7 @@ using grid = vector<vector<long long>>;
 
 
 ll n=8, h=log2(n);
-vi v={2, 4, -3, 9, 0, -4, 8, 1};
+vi v={2, -1, -3, 9, 0, -4, 8, 1};
 vi st(n<<1, 0);
 vi lt(n, 0);
 ll idn=0;
@@ -55,6 +55,7 @@ void prgt(ll nd, ll k){
 
 void pull(ll a){ //will sync a node with all updates
   stack<ll> par;
+  a+=n;
   a>>=1;
   ll k=1; // # of leaves under 
   while(a){ //puts all ancestors in stack;
@@ -76,23 +77,30 @@ void updt(ll l, ll r, ll val){
   //child of the parent. else we update
   //lt[parent]; same for r.
   ll k=1; //careful, r is shifted +1 making range [l, r);
+  bool cil=0, cir=0;
   for(l+=n, r+=n+1; l<r; l>>=1, r>>=1, k*=2){
     if(l>=n){ //leaf node case;
-      if(l&1) st[l++]+=val;
-      if(r&1) st[--r]+=val;
+      if(l&1) {st[l++]+=val; cil=1;}
+      if(r&1) {st[--r]+=val; cir=1;}
       continue;
     }
+    if(cil) st[l-1]=fun(st[(l-1)<<1], st[(l-1)<<1|1]);
     if(l&1){
       lt[l]+=val;
       st[l]+=val*k;
-      l++;
+      l++; cil=1;
     }
+    if(cir) st[r]=fun(st[r<<1], st[r<<1|1]);
     if(r&1){
-      r--;
+      r--; cir=1;
       lt[r]+=val;
       st[r]+=val*k;
     }
   }
+  for(--l; r; l>>=1, r>>=1){ //jst syncs ancestors with change;
+    if(cil) st[l]=fun(st[l<<1], st[l<<1|1]);
+    if(cir && (!cil||l-r)) st[r]=fun(st[r<<1], st[r<<1|1]);
+  } 
   return;
 }
 
@@ -111,10 +119,15 @@ void stgr(ll l, ll r){
 
 void solve(){
   mkst();
-  show();
   stgr(1, 7);
-  updt(1, 7, 2);
+  updt(0, 7, 2);
   show();
+  stgr(1, 6);
+  show();
+  updt(2, 5, 5);
+  show();
+  stgr(3, 4);
+  stgr(1, 6);
   return;
 }
 
