@@ -39,7 +39,7 @@ void mkst(){ //building segtree, obvious;
   return;
 } 
 
-void prgt(ll nd, ll k){
+void prgt(ll nd, ll k){ //sends pending update to both children;
   //left child
   ll lc= nd<<1;
   if(nd<n) lt[lc]+=lt[nd];
@@ -63,7 +63,7 @@ void pull(ll a){ //will sync a node with all updates
     a>>=1;
     k<<=1;
   }
-  while(!par.empty()){
+  while(!par.empty()){ //propagate from root to leaf;
     ll nd=par.top(); par.pop();
     prgt(nd, k);
     k>>=1;
@@ -97,6 +97,7 @@ void updt(ll l, ll r, ll val){
       st[r]+=val*k;
     }
   }
+  //i copied the next part which only 'kinda' makes sense;
   for(--l; r; l>>=1, r>>=1){ //jst syncs ancestors with change;
     if(cil) st[l]=fun(st[l<<1], st[l<<1|1]);
     if(cir && (!cil||l-r)) st[r]=fun(st[r<<1], st[r<<1|1]);
@@ -104,7 +105,7 @@ void updt(ll l, ll r, ll val){
   return;
 }
 
-void stgr(ll l, ll r){
+void stgr(ll l, ll r){ //process only parent not completely in range
   ll res = idn;
   pull(l);
   pull(r);
