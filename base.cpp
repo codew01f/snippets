@@ -3,11 +3,11 @@
 
 using namespace std;
 using ll = long long;
-using vi = vector<long long>;
-using si = set<long long>;
-using pii = pair<long long, long long>;
-using mii = map<long long, long long>;
-using grid = vector<vector<long long>>;
+using vi = vector<ll>;
+using si = set<ll>;
+using pii = pair<ll, ll>;
+using mii = map<ll, ll>;
+using grid = vector<vi>;
 
 #define gd(r, c, i) gd(r, vi(c, i))
 #define fix(p) cout<<setprecision(p)<<fixed
@@ -21,6 +21,7 @@ void solve(){
 }
 
 int main(){
+  //freopen("input.txt", "r", stdin);
   ios_base::sync_with_stdio(0);
   cin.tie(0); cout.tie(0);
 
