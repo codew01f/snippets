@@ -16,53 +16,44 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-ll cn=7, ce=12;
 
-vector<vector<pii>> mkwgph(ll cn, ll ce){
-  vector<vector<pii>> edg(cn+1, vector<pii>(0));
 
-  ll fr, to, wt;
-  fir(ce){
-    cin>>fr>>to>>wt;
-    edg[fr].push_back({to, wt});
-    edg[to].push_back({fr, wt});
+grid mkst(vi &v){
+  int n = v.size();
+  int k = log2(n-1);
+  grid st(k+1, vi(n, 0));
+
+  fir(n){
+    st[0][i] = v[i];
   }
-  return edg; 
-}
-
-set<pii> mst(ll cn, ll ce, vector<vector<pii>> &edg){
-  set<pii> mst;
-  vi vst(cn+1, 0);
-  set<pair<ll, pii>> sedg;
-  fir(cn+1){
-    for(auto [to, wt]:edg[i]){
-      sedg.insert({wt, {i, to}});
+  fir(k){
+    fjr(n-(2<<i)+1){
+      st[i+1][j] = min(st[i][j], st[i][j+(1<<i)]);
     }
   }
- 
-  ll cms=0;
-  while(!sedg.empty() && cms<cn){
-    auto [fr, to]=sedg.begin()->second;
-    sedg.erase(sedg.begin());
-    if(vst[fr] && vst[to]) continue; 
-    vst[fr]|=1; vst[to]|=1;
-    mst.insert({fr, to});
-    cms++;
-  }
-  return mst;
+  return st;
 }
-void solve(){
-  cout<<"HI MOM!";
-  auto edg=mkwgph(cn, ce);
-  set<pii> mst1=mst(cn, ce, edg);
-  for(auto [x, y]:mst1) cout<<x<<" "<<y;
-  cout<<endl;
+
+ll stgm(grid &st, int l, int r){ //0 indexed;
+  int i = log2(r-l);
+  ll mi = min(st[i][l], st[i][r-(1<<i)+1]);
+
+  return mi;
+}void solve(){
+  vi v = {24, 1, 23, -2, 20, 4, 8, 12, 16};
+  grid sp = mkst(v);
+  for(vi x:sp){
+    for(ll i:x){
+      cout<<i<<" ";
+    }
+    cout<<endl;
+  }
+  cout<<stgm(sp, 0, 8);
   return; 
 }
 
 int main(){
   freopen("input.txt", "r", stdin);
-  freopen("output.txt", "w", stdout);
   
   ios_base::sync_with_stdio(0);
   cin.tie(0); cout.tie(0);
