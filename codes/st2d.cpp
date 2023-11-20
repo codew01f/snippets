@@ -41,6 +41,7 @@ vector<grid> mkst(vector<vi> g){
 }
 
 ll stgm(vector<grid> st, int r, int c, int k){ //0 indexed;
+  if(k==1) return st[0][r][c]; 
   int p = log2(k-1);
   int rr = r+k-1;
   int cc = c+k-1;
