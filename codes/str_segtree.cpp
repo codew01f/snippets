@@ -43,7 +43,7 @@ node lzapply(node cur, lazy upd, ll sz){
 
 segtr mkst(vector<node> &v){
   ll n=v.size();
-  vector<node> st(n<<1);
+  vector<node> st(n<<1, idn);
   vector<lazy> lt(n, lzid);
 
   fir(n) st[i+n]=v[i];
@@ -59,9 +59,10 @@ void prgt(segtr &tr, ll nd, ll sz){
   lazy upd = lt[nd];
   ll lft=nd<<1, rgt=nd<<1|1;
 
-  if(nd<n){
-    lt[lft] = lzmerge(lt[lft],upd, sz/2);
-    lt[rgt] = lzmerge(lt[lft],upd, sz/2);
+  if(nd<(n/2)){
+    lazy aa = lzmerge(lt[lft],upd, sz/2);
+    lazy bb = lzmerge(lt[lft],upd, sz/2);
+    lt[lft]=aa; lt[rgt]=bb; 
   }
   st[lft] = lzapply(st[lft], upd, sz/2);
   st[rgt] = lzapply(st[lft], upd, sz/2);
@@ -99,18 +100,18 @@ void stud(segtr &tr, ll l, ll r, ll val){
 
   for(l+=n, r+=n+1; l<r; l>>=1, r>>=1, k*=2){
     if(l>=n){
-      if(l&1){st[l]=lzapply(st[l], val, k); l++;}
-      if(r&1){r--; st[r]=lzapply(st[r], val, k);}
+      if(l&1){st[l]=lzapply(st[l], val, k); l++; cil=1;}
+      if(r&1){r--; cir=1; st[r]=lzapply(st[r], val, k);}
       continue;
     }
 
     if(cil) st[l-1]=merge(st[(l-1)<<1], st[(l-1)<<1|1]);
-    if(cir) st[r]=merge(st[r<<1], st[r<<1|1]);
     if(l&1){
       lt[l]=lzmerge(lt[l], val, k);
       st[l]=lzapply(st[l], val, k);
       l++; cil=1;
     }
+    if(cir) st[r]=merge(st[r<<1], st[r<<1|1]);
     if(r&1){
       r--; cir=1;
       lt[r]=lzmerge(lt[r], val, k);
@@ -118,7 +119,7 @@ void stud(segtr &tr, ll l, ll r, ll val){
     }
   }
   for(--l; r; l>>=1, r>>=1){
-    if(cil) st[l]=merge(st[l<<1], st[l<<1|1]);
+    if(cil) st[l]= merge(st[l<<1], st[l<<1|1]);
     if(cir && (!cil||(l-r))) st[r]=merge(st[r<<1], st[r<<1|1]);
   }
   tr = {st, lt};
@@ -144,11 +145,17 @@ void solve(){
   string s; cin>>s;
 
   vector<node> inp(n, idn);
+
   fir(n){
     inp[i][s[i]-'0']=1;
   }
 
   auto st = mkst(inp);
+  /*
+  for(vi v:inp){
+    for(ll i:v) cout<<i;
+    cout<<"\n";
+  }*/
 
   while(q--){
     ll l, r, res=0; cin>>l>>r; l--; r--;
