@@ -63,7 +63,7 @@ void prgt(segtr &tr, ll nd, ll sz){
     lt[lft] = lzmerge(lt[lft],upd, sz/2);
     lt[rgt] = lzmerge(lt[lft],upd, sz/2);
   }
-  st[lft] = lzapply(st[lft], upd, sz/1);
+  st[lft] = lzapply(st[lft], upd, sz/2);
   st[rgt] = lzapply(st[lft], upd, sz/2);
 
   lt[nd]=lzid;
@@ -116,14 +116,13 @@ void stud(segtr &tr, ll l, ll r, ll val){
       lt[r]=lzmerge(lt[r], val, k);
       st[r]=lzapply(st[r], val, k);
     }
-
-    for(--l; r; l>>=1, r>>=1){
-      if(cil) st[l]=merge(st[l<<1], st[l<<1|1]);
-      if(cir && (!cil||(l-r))) st[r]=merge(st[r<<1], st[r<<1|1]);
-    }
-    tr = {st, lt};
-    return;
   }
+  for(--l; r; l>>=1, r>>=1){
+    if(cil) st[l]=merge(st[l<<1], st[l<<1|1]);
+    if(cir && (!cil||(l-r))) st[r]=merge(st[r<<1], st[r<<1|1]);
+  }
+  tr = {st, lt};
+  return;
 }
 
 node stgr(segtr &tr, ll l, ll r){
