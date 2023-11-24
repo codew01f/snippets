@@ -16,53 +16,72 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-vector<grid> mkst(vector<vi> g){
-  int r=g.size();
-  int c=g[0].size();
-  int k=log2(min(r, c)-1);
 
-  vector<grid> res(k+1, grid(r, vi(c, 0)));
-  fir(r){
-    fjr(c){
-      res[0][i][j]=g[i][j];
+void ftud(grid &ft, ll i, ll jj, ll val){
+  ll r=ft.size();
+  ll c=ft[0].size();
+  
+  ll j;
+  for(; i<r; i += -i&i){
+    for(j=jj; j<c; j += -j&j){
+      ft[i][j]+=val;
     }
   }
-  for(int p=0; p<k; ++p){
-    fir(r-(2<<p)+1){
-      fjr(c-(2<<p)+1){
-        ll m1=min(res[p][i][j], res[p][i][j+(1<<p)]);
-        ll m2=min(res[p][i+(1<<p)][j], res[p][i+(1<<p)][j+(1<<p)]);
+  return;
+}
 
-        res[p+1][i][j]=min(m1, m2);
-      }
+grid mkft(grid &g){
+  ll r=g.size();
+  ll c=g[0].size();
+  grid res(r+1, vi(c+1, 0));
+
+  fir(r){
+    fjr(c){
+      ftud(res, i+1, j+1, g[j][i]);
     }
   }
   return res;
 }
 
-ll stgm(vector<grid> st, int r, int c, int k){ //0 indexed;
-  int p = log2(k-1);
-  int rr = r+k-1;
-  int cc = c+k-1;
-  ll mi1=min(st[p][r][c], st[p][rr-(1<<p)+1][c]);
-  ll mi2=min(st[p][r][cc-(1<<p)+1], st[p][rr-(1<<p)+1][cc-(1<<p)+1]);
-  return min(mi1, mi2);
+ll gt(grid &ft, ll x, ll yy){
+  ll res=0, y;
+  for(; x; x -= x&-x){
+    for(y=yy; y; y -= y&-y){
+      res+=ft[x][y];
+    }
+  }
+  return res;
+}
+
+ll ftgs(grid &ft, ll x1, ll y1, ll x2, ll y2){
+   x1++; y1++; x2++; y2++;
+   return gt(ft, x2, y2)-gt(ft, x1-1, y2)-gt(ft, x2, y1-1)+gt(ft, x1-1, y1-1);
 }
 
 void solve(){
-  grid g = {{1, 2, 4, -10}, 
-             {-2, 4, -1, 7},
-             {3, 1, -5, -8}};
-  auto st=mkst(g);
-  grid d0 = st[0];
-  for(vi v:d0){
-    for(ll i: v){
-      cout<<i<<" ";
+  ll n, q; cin>>n>>q; grid gd(n, n, 0);
+  fir(n){
+    string s; cin>>s;
+    fjr(n){
+      char c=s[j];
+      if(c=='*') gd[i][j] = 1;
     }
-    cout<<endl;
   }
-  cout<<stgm(st, 0, 1, 2)<<"\n";
-   return; 
+  auto ft=mkft(gd);
+
+  while(q--){
+    int qq; cin>>qq;
+    if(q==1){
+      ll x, y; cin>>x>>y;
+      ll temp = ftgs(ft, x, y, x,y);
+      ftud(ft, y-1, x-1, 1-2*temp);
+    }
+    else{
+      ll y1, x1, y2, x2; cin>>x1>>y1>>x2>>y2;
+      cout<<ftgs(ft, x1-1, y1-1, x2-1, y2-1)<<"\n";
+    }
+  }
+  return;
 }
 
 int main(){
