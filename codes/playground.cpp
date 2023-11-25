@@ -18,7 +18,7 @@ using grid = vector<vector<long long>>;
 
 
 void ftud(grid &ft, ll rr, ll cc, ll val){
-  rr++; cc++;
+  rr++; cc++; 
   ll row=ft.size();
   ll col=ft[0].size(), c;
   
@@ -37,7 +37,7 @@ grid mkft(grid &g){
 
   fir(row){
     fjr(col){
-      ftud(gd, i+1, j+1, g[i][j]);
+      ftud(gd, i, j, g[i][j]);
     }
   }
   return gd;
@@ -70,12 +70,19 @@ void solve(){
     }
   }
   auto ft=mkft(gd);
+ /* 
+  fir(n+1){
+    fjr(n+1){
+      cout<<ft[i][j]<<" ";
+    }
+    cout<<endl;
+  }*/
 
   while(q--){
     int qq; cin>>qq;
     if(q==1){
       ll y, x; cin>>y>>x;
-      ll temp = ftgs(ft, y, x, y, x);
+      ll temp = ftgs(ft, y-1, x-1, y-1, x-1);
       ftud(ft, y-1, x-1, 1-2*temp);
     }
     else{

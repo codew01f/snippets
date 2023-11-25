@@ -1,6 +1,6 @@
 
 void ftud(grid &ft, ll rr, ll cc, ll val){
-  rr++; cc++;
+  rr++; cc++; 
   ll row=ft.size();
   ll col=ft[0].size(), c;
   
@@ -19,7 +19,7 @@ grid mkft(grid &g){
 
   fir(row){
     fjr(col){
-      ftud(gd, i+1, j+1, g[i][j]);
+      ftud(gd, i, j, g[i][j]);
     }
   }
   return gd;
