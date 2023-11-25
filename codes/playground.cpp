@@ -18,19 +18,46 @@ using grid = vector<vector<long long>>;
 
 
 void ftud(grid &ft, ll rr, ll cc, ll val){
+  ll row=ft.size();
+  ll col=ft[0].size(), c;
+  
+  for(; rr<row; rr+= -rr&rr){
+    for(c=cc; c<col; c+= -c&c){
+      ft[rr][c]+=val;
+    }
+  }
   return;
 }
 
 grid mkft(grid &g){
- 
-  return res;
+  ll row=g.size();
+  ll col=g[0].size();
+  grid gd(row+1, col+1, 0);
+
+  fir(row){
+    fjr(col){
+      ftud(gd, i+1, j+1, g[i][j]);
+    }
+  }
+  return gd;
 }
 
 ll gt(grid &ft, ll rr, ll cc){
-   return res;
+  //ll row=ft.size();
+  //ll col=ft[0].size();
+  ll res=0, c;
+  
+  for(; rr; rr -= rr&-rr){
+    for(c=cc; c; c -= c&-c){
+      res+=ft[rr][c];
+    }
+  }
+  return res;
 }
 
 ll ftgs(grid &ft, ll r1, ll c1, ll r2, ll c2){
+  return gt(ft, r2, c2)-gt(ft, r1-1, c2)
+        -gt(ft, r2, c1-1)+gt(ft, r1-1, c1-1);
 }
 
 void solve(){
@@ -47,13 +74,13 @@ void solve(){
   while(q--){
     int qq; cin>>qq;
     if(q==1){
-      ll x, y; cin>>x>>y;
-      ll temp = ftgs(ft, x, y, x,y);
-      ftud(ft, x-1, y-1, 1-2*temp);
+      ll y, x; cin>>y>>x;
+      ll temp = ftgs(ft, y, x, y, x);
+      ftud(ft, y-1, x-1, 1-2*temp);
     }
     else{
       ll y1, x1, y2, x2; cin>>y1>>x1>>y2>>x2;
-      cout<<ftgs(ft, x1-1, y1-1, x2-1, y2-1)<<"\n";
+      cout<<ftgs(ft, y1-1, x1-1, y2-1, x2-1)<<"\n";
     }
   }
   return;
