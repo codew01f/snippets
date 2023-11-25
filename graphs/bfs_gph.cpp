@@ -26,4 +26,5 @@ void bfs(grid &edg, ll sn){
       }
     }
   }
+  return;
 }
