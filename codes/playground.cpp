@@ -18,6 +18,7 @@ using grid = vector<vector<long long>>;
 
 
 void ftud(grid &ft, ll rr, ll cc, ll val){
+  rr++; cc++;
   ll row=ft.size();
   ll col=ft[0].size(), c;
   
@@ -43,8 +44,7 @@ grid mkft(grid &g){
 }
 
 ll gt(grid &ft, ll rr, ll cc){
-  //ll row=ft.size();
-  //ll col=ft[0].size();
+  rr++; cc++;
   ll res=0, c;
   
   for(; rr; rr -= rr&-rr){
