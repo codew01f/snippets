@@ -1,13 +1,9 @@
 
 #include <bits/stdc++.h>
-
 using namespace std;
 using ll = long long;
-using vi = vector<long long>;
-using si = set<long long>;
-using pii = pair<long long, long long>;
-using mii = map<long long, long long>;
-using grid = vector<vector<long long>>;
+using vi = vector<ll>;
+using pii = pair<ll, ll>;
 
 #define gd(r, c, i) gd(r, vi(c, i))
 #define fix(p) cout<<setprecision(p)<<fixed
@@ -16,83 +12,161 @@ using grid = vector<vector<long long>>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
+template<typename node, typename change>
+class sgtr{
+public: 
+  int n;
 
-void ftud(grid &ft, ll rr, ll cc, ll val){
-  rr++; cc++; 
-  ll row=ft.size();
-  ll col=ft[0].size(), c;
+  node *tree, idnt;
+  node (*merge)(node, node);
+  change *lazy, nochange;
   
-  for(; rr<row; rr+= -rr&rr){
-    for(c=cc; c<col; c+= -c&c){
-      ft[rr][c]+=val;
+  void (*applyud)(ll, ll, node&, change);
+  void (*mergeud)(ll, ll, change&, change);
+
+  void build(vector<node> &inp, ll lo, ll hi, ll root=0){
+    if(lo==hi){
+      tree[root]=inp[lo];
+      return;
     }
+    ll md=mid(lo, hi), lc=2*root+1, rc=2*root+2;
+    build(inp, lo, md, lc);
+    build(inp, md+1, hi, rc);
+ 
+    tree[root]=merge(tree[lc], tree[rc]);
+    return;
   }
+  void prgt(ll lo, ll hi, ll root){
+    applyud(lo, hi, tree[root], lazy[root]);
+    if(lo<hi){
+      ll md=mid(lo, hi), lc=2*root+1, rc=2*root+2;
+      mergeud(lo, md, lazy[lc], lazy[root]);
+      mergeud(md+1, hi, lazy[rc], lazy[root]);
+    }
+    lazy[root]=nochange;
+    return;
+  }
+  void updt(ll fr, ll to, ll lo, ll hi, ll root, change del){
+    if(lo>hi) return;
+    prgt(lo, hi, root);
+    if(fr>hi || to<lo) return;
+    if(fr<=lo && to>=hi){
+      mergeud(lo, hi, lazy[root], del);
+      prgt(lo, hi, root);
+      return;
+    }
+    ll md=mid(lo, hi), lc=2*root+1, rc=2*root+2;
+    updt(fr, to, lo, md, lc, del);
+    updt(fr, to, md+1, hi, rc, del);
+
+    tree[root]=merge(tree[lc], tree[rc]);
+    return;
+  }
+  node query(ll fr, ll to, ll lo, ll hi, ll root){
+    if(lo>hi) return idnt;
+    prgt(lo, hi, root);
+    if(fr>hi || to<lo) return idnt;
+    if(fr<=lo && to>=hi) return tree[root];
+
+    ll md=mid(lo, hi), lc=2*root+1, rc=2*root+2;
+    node q1=query(fr, to, lo, md, lc);
+    node q2=query(fr, to, md+1, hi, rc);
+    
+    return merge(q1, q2);
+  }
+
+public:
+  sgtr(sgtr &st):
+    tree(st.tree), lazy(st.lazy), n(st.n),
+    merge(st.merge), idnt(st.idnt),
+    applyud(st.applyud), mergeud(st.mergeud),
+    nochange(st.nochange){}
+
+  sgtr(
+    vector<node> &inp,
+    node (*merge)(node, node),
+    node idnt,
+    void (*applyud)(ll, ll, node&, change),
+    void (*mergeud)(ll, ll, change&, change),
+    change nochange):
+    n(inp.size()),
+    merge(merge), idnt(idnt),
+    applyud(applyud), mergeud(mergeud),
+    nochange(nochange){
+    tree=new node[n<<2];
+    build(inp, 0, n-1);
+    lazy=new change[n<<2];
+    fill(lazy, lazy+(n<<2), nochange);
+  }
+  node query(ll fr, ll to){
+    if(fr>to || to>n) return idnt;
+    return query(fr, to, 0, n-1, 0);
+  }
+  void updt(ll fr, ll to, change del){
+    updt(fr, to, 0, n-1, 0, del);
+  }
+  ~sgtr(){
+    delete[] tree;
+    delete[] lazy;
+  }
+};
+
+//----------------------------------------
+using nd=ll;
+using dl=pii;
+
+nd merg(nd a, nd b){
+  nd res = a+b;
+  return res;
+}
+void aplz(ll lo, ll hi, nd &val, dl del0){
+  auto [typ, num]=del0;
+  if(typ==1) val= val+num*(hi-lo+1);
+  else val= num*(hi-lo+1);
+  return;
+}
+void mrlz(ll lo, ll hi, dl &del1, dl del2){
+  auto [typ1, num1]=del1;
+  auto [typ2, num2]=del2;
+  if(typ2==1) del1={typ1, num1+num2};
+  else del1=del2;
   return;
 }
 
-grid mkft(grid &g){
-  ll row=g.size();
-  ll col=g[0].size();
-  grid gd(row+1, col+1, 0);
-
-  fir(row){
-    fjr(col){
-      ftud(gd, i, j, g[i][j]);
-    }
-  }
-  return gd;
-}
-
-ll gt(grid &ft, ll rr, ll cc){
-  rr++; cc++;
-  ll res=0, c;
-  
-  for(; rr; rr -= rr&-rr){
-    for(c=cc; c; c -= c&-c){
-      res+=ft[rr][c];
-    }
-  }
-  return res;
-}
-
-ll ftgs(grid &ft, ll r1, ll c1, ll r2, ll c2){
-  return gt(ft, r2, c2)-gt(ft, r1-1, c2)
-        -gt(ft, r2, c1-1)+gt(ft, r1-1, c1-1);
-}
-
 void solve(){
-  ll n, q; cin>>n>>q; grid gd(n, n, 0);
-  fir(n){
-    string s; cin>>s;
-    fjr(n){
-      char c=s[j];
-      if(c=='*') gd[i][j] = 1;
-    }
-  }
-  auto ft=mkft(gd);
- 
+  ll n, q, qq, a, b, c;
+  cin>>n>>q;
+  vector<nd> v(n);
+  for(auto &i: v) cin>>i;
+
+  nd idn = 0;
+  dl lzid={1, 0};
+  sgtr<nd, dl> st(v, merg, idn, aplz, mrlz, lzid);
+
   while(q--){
-    int qq; cin>>qq;
-    if(qq==1){
-      ll y, x; cin>>y>>x;
-      ll temp = ftgs(ft, y-1, x-1, y-1, x-1);
-      ftud(ft, y-1, x-1, 1-2*temp);
+    cin>>qq>>a>>b;
+    a--; b--;
+    if(qq == 1){
+      cin>>c;
+      st.updt(a, b, {1, c});
     }
-    else{
-      ll y1, x1, y2, x2; cin>>y1>>x1>>y2>>x2;
-      cout<<ftgs(ft, y1-1, x1-1, y2-1, x2-1)<<"\n";
+    if(qq == 2){
+      cin>>c;
+      st.updt(a, b, {2, c});
+    }
+    if(qq==3){
+      cout<<st.query(a, b)<<"\n";
     }
   }
   return;
 }
 
 int main(){
-  freopen("input.txt", "r", stdin);
-  
+  //freopen("input.txt", "r", stdin);
   ios_base::sync_with_stdio(0);
   cin.tie(0); cout.tie(0);
 
-  int tt=1;// cin>>tt;
+  int tt=1; //cin>>tt;
   while(tt--){
     solve();
   }
