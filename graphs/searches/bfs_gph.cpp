@@ -1,17 +1,13 @@
 
-vi vst(cn+1, 0);
-vi prt(cn+1, -1);
-
 void bfs(grid &edg, ll sn){
-  ll lv=-1, cl=0, nl=1;
+  ll cn=edg.size(), lv=-1, cl=0, nl=1;
+  vi vst(cn+1, 0), prt(cn+1, -1);
   queue<ll> call;
   call.push(sn);
   while(!call.empty()){
     vst[sn]++;
     if(!cl){
-      lv++;
-      cl=nl;
-      nl=0;
+      lv++; cl=nl; nl=0;
     }
 
     int at=call.front();
