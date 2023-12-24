@@ -1,6 +1,6 @@
 
 void bfs(grid &edg, ll sn){
-  ll cn=edg.size(), lv=-1, cl=0, nl=1, at;
+  ll cn=edg.size(), lv=-1, cl=0, nl=1, at, lt;
   vi vst(cn+1, 0), prt(cn+1, -1);
   queue<ll> call;
   call.push(sn);
@@ -12,7 +12,7 @@ void bfs(grid &edg, ll sn){
 
     at=call.front();
     //if(at==en) return lv;
-    call.pop(); cl--;
+    call.pop(); cl--; lt=at;
     for(ll to:edg[at]){
       if(!vst[to]){
 
@@ -24,5 +24,5 @@ void bfs(grid &edg, ll sn){
     }
   }
   return;
-  //return at; //for deepest.
+  //return ls; //for deepest.
 }
