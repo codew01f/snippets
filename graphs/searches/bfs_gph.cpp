@@ -11,6 +11,7 @@ void bfs(grid &edg, ll sn){
     }
 
     int at=call.front();
+    //if(at==en) return lv;
     call.pop(); cl--;
     for(ll to:edg[at]){
       if(!vst[to]){
