@@ -12,7 +12,7 @@ ll bfs(grid &edg, ll sn){
 
     at=call.front();
     //if(at==en) return lv;
-    call.pop(); cl--; lt=at;
+    call.pop(); cl--; ls=at;
     for(ll to:edg[at]){
       if(!vst[to]){
 
