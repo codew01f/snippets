@@ -15,7 +15,7 @@ void ftud(grid &ft, ll rr, ll cc, ll del){
 grid mkft(grid &g){
   ll row=g.size();
   ll col=g[0].size();
-  grid gd(row+1, col+1, 0);
+  grid gd(row, col, 0);
 
   fir(row){
     fjr(col){
