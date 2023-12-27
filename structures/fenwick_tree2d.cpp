@@ -1,12 +1,12 @@
 
-void ftud(grid &ft, ll rr, ll cc, ll val){
+void ftud(grid &ft, ll rr, ll cc, ll del){
   rr++; cc++; 
   ll row=ft.size();
   ll col=ft[0].size(), c;
   
   for(; rr<row; rr+= -rr&rr){
     for(c=cc; c<col; c+= -c&c){
-      ft[rr][c]+=val;
+      ft[rr][c]+=del;
     }
   }
   return;
