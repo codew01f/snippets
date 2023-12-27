@@ -1,7 +1,7 @@
 
 grid mkst(vi &v){
-  int n = v.size();
-  int k = log2(n-1);
+  ll n = v.size();
+  ll k = log2(n-1);
   grid st(k+1, vi(n, 0));
 
   fir(n){

@@ -1,5 +1,5 @@
 
-set<pii> mst(ll cn, ll ce, vector<vector<pii>> &edg){
+set<pii> mst(ll cn, ll ce, vector<vector<pii>> &edg){ //prims' alg
   set<pii> mst;
   vi vst(cn+1, 0);
   priority_queue<pair<ll, pii>, vector<pair<ll, pii>>, greater<pair<ll, pii>>> call;

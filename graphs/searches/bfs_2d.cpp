@@ -1,7 +1,7 @@
 
 void bfs(vector<vi> &q, int r, int c){
-  int row=q.size();
-  int col=q[0].size();
+  ll row=q.size();
+  ll col=q[0].size();
   ll lv=-1, cl=0, nl=1;
   vi dx={1, -1, 0, 0};
   vi dy={0, 0, -1, 1};
@@ -10,9 +10,7 @@ void bfs(vector<vi> &q, int r, int c){
   call.push({r, c});
   while(!call.empty()){
     if(!cl){
-      lv++;
-      cl=nl;
-      nl=0;
+      lv++; cl=nl; nl=0;
     }
     auto [y, x]=call.front();
     call.pop(); cl--;

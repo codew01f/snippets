@@ -1,5 +1,5 @@
 
-vector<grid> mkst(vector<vi> g){
+vector<grid> mkst(grid g){
   int r=g.size();
   int c=g[0].size();
   int k=log2(min(r, c)-1);
