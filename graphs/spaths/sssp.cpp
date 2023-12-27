@@ -1,6 +1,7 @@
 
-vi sssd(ll cn, ll ce, ll s, vector<vector<pii>> &edg){
-  vi dis(cn+1, INT_MAX);
+vi sssd(vector<vector<pii>> &edg, ll s){ //dijkstras' alg
+  ll cn=edg.size();
+  vi dis(cn, INT_MAX);
   dis[s]=0;
   vi vst(cn+1, 0);
   priority_queue<pii, vector<pii>, greater<pii>> call;
