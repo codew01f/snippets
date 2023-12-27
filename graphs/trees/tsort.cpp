@@ -1,7 +1,7 @@
 
-vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
-  vi ts(cn, 0);
-  vi indg(cn+1, 0);
+vi tsort(grid &edg){ //kahns' alg;
+  ll cn=edg.size()-1;
+  vi ts(cn, 0), indg(cn+1, 0);
   queue<ll> call;
 
   for(vi v:edg){
@@ -26,9 +26,9 @@ vi tsort(ll cn, ll ce, grid &edg){ //kahns' alg;
 }
 
 
-vi wtsort(ll cn, ll ce, vector<vector<pii>> &edg){
-  vi ts(cn, 0);
-  vi indg(cn+1, 0);
+vi wtsort(vector<vector<pii>> &edg){
+  ll cn=edg.size()-1;
+  vi ts(cn, 0), indg(cn+1, 0);
   queue<ll> call;
 
   for(auto v:edg){
@@ -53,9 +53,9 @@ vi wtsort(ll cn, ll ce, vector<vector<pii>> &edg){
 }
 
 
-vi tsort(ll cn, ll ce, grid &edg){ //dfs;
-  vi ts(cn, 0);
-  vi vst(cn+1, 0);
+vi tsort(grid &edg){ //dfs
+  ll cn=edg.size()-1;
+  vi ts(cn, 0), vst(cn+1, 0);
   stack<int> call;
 
   ll cnt=cn;
