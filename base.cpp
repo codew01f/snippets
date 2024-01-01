@@ -13,7 +13,8 @@ using grid = vector<vi>;
 #define fjr(a) for(int j=0; j<a; ++j)
 
 void solve(){
-  
+
+  return;
 }
 
 int main(){
