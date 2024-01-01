@@ -13,7 +13,7 @@ void et(grid &edg, ll at, ll pt, grid &tr, ll &id){
 
 grid etour(grid &edg, ll rt){
   ll cn=edg.size(), id=1;
-  vi tour={vi(2*cn, 0), vi(cn), vi(cn)};
+  grid tour={vi(2*cn, 0), vi(cn), vi(cn)};
   et(edg, rt, 0, tour, id);
   return tour;
 }
