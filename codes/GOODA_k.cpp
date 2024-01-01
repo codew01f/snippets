@@ -42,47 +42,27 @@ vi scc(grid &edg, grid &rev){
 //--------------------------
 
 //------------------------toposort
-vi wtsort(vector<vector<pii>> &edg){
-  ll cn=edg.size()-1;
-  vi ts(cn, 0), indg(cn+1, 0);
-  queue<ll> call;
 
-  for(auto v:edg){
-    for(auto[to, wt]:v) indg[to]++;
-  }
-  fir(cn){
-    if(!indg[i+1]) call.push(i+1);
-  }
-
-  ll id=0;
-  while(!call.empty()){
-    ll at=call.front();
-    call.pop();
-    ts[id++]=at;
-
-    for(auto [to, wt]:edg[at]){
-      indg[to]--;
-      if(!indg[to]) call.push(to);
-    }
-  }
-  return ts;
-}
-//-----------------------/tsort
-
-//single source shortest dis on dag
-vi sssd(vector<vector<pii>> &edg, vi &ts, ll s){
+vi sssd(vector<vector<pii>> &edg, ll s){ //dijkstras' alg
   ll cn=edg.size();
   vi dis(cn, INT_MAX);
   dis[s]=0;
+  vi vst(cn, 0);
+  priority_queue<pii, vector<pii>, greater<pii>> call;
 
-  ll idx=0;
-  while(ts[idx]!=s) idx++;
-  while(idx<cn-1){
-    ll at=ts[idx];
+  call.push({0, s});
+  while(!call.empty()){
+    auto [wt0, at]=call.top();
+    call.pop();
+    vst[at]++;
     for(auto [to, wt]:edg[at]){
-      dis[to]=min(dis[to], dis[at]+wt);
+      if(vst[to]) continue;
+      ll d=dis[at]+wt;
+      if(d<dis[to]){
+        dis[to]=d;
+        call.push({d, to});
+      }
     }
-    idx++;
   }
   return dis;
 }
@@ -105,7 +85,7 @@ void solve(){
   fir(n) cin>>fun[i+1];
   grid gph = mkgph(n, m);
   vi sc = scc(gph, revg);
-  
+
   for(int i=1; i<=n; i++){ //calculates fun of scc to head.
     if(i != sc[i]){
       fun[sc[i]]+=fun[i];
@@ -118,15 +98,13 @@ void solve(){
     comgph[sc[i+1]].push_back({sc[to], -fun[to]});
   }
   
-  vi topsort = wtsort(comgph);
-  vi shortd = sssd(comgph, topsort, s);
-  
-  cout<<fun[s]-shortd[sc[e]]<<"\n";
+  vi shortd = sssd(comgph, sc[s]);
+  cout<<fun[sc[s]]-shortd[sc[e]]<<"\n";
   return;
 }
 
 int main(){
-  //freopen("input.txt", "r", stdin);
+  freopen("input.txt", "r", stdin);
   ios_base::sync_with_stdio(0);
   cin.tie(0); cout.tie(0);
 
