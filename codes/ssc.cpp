@@ -12,7 +12,7 @@ using grid = vector<vi>;
 #define fir(a) for(int i=0; i<a; ++i)
 #define fjr(a) for(int j=0; j<a; ++j)
 
-ll cn = 9, ce=15; 
+ll cn = 10, ce=14; 
 vi mn(cn+1, 0);
 vi instk(cn+1, 0);
 vi idx(cn+1, 0);
@@ -41,7 +41,6 @@ void dfs(grid &edg, ll n){
   mn[n]=id;
   id++;
   stk.push(n); instk[n]++;
-  cout<<"help";
   for(ll to: edg[n]){
     if(!vst[to]){
       dfs(edg, to);
