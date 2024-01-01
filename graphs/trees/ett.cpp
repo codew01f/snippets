@@ -1,12 +1,12 @@
 
 void et(grid &edg, ll at, ll pt, grid &tr, ll &id){
-  tr[0][id]=at; //=val[at]
+  tr[0][id]=at; //val[at];
   tr[1][at]=id++;
 
   for(ll to: edg[at]) if(to-pt){
     et(edg, to, at, tr, id);
   }
-  tr[0][id]=at;
+  tr[0][id]=at; //val[at];
   tr[2][at]=id++;
   return;
 }
