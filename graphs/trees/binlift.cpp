@@ -1,5 +1,5 @@
 
-grid binlift(grid &edg, vi par){
+grid binlift(grid &edg, vi &par){
   ll cn=edg.size(), kk=log2(cn);
   grid bl(kk+1, vi(cn, 0));
 
