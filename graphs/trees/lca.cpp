@@ -1,5 +1,5 @@
 
-ll lca(grid &bl, ll a, ll b, vi dep){
+ll lca(grid &bl, ll a, ll b, vi &dep){
   if(dep[a]<dep[b]) swap(a, b);
   ll k=dep[a]-dep[b], kk=bl.size()-1;
 
