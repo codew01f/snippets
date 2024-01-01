@@ -41,7 +41,7 @@ vi scc(grid &edg, grid &rev){
 }
 //--------------------------
 
-//------------------------tsort
+//------------------------toposort
 vi wtsort(vector<vector<pii>> &edg){
   ll cn=edg.size()-1;
   vi ts(cn, 0), indg(cn+1, 0);
@@ -69,7 +69,7 @@ vi wtsort(vector<vector<pii>> &edg){
 }
 //-----------------------/tsort
 
-//single source shortest dis
+//single source shortest dis on dag
 vi sssd(vector<vector<pii>> &edg, vi &ts, ll s){
   ll cn=edg.size();
   vi dis(cn, INT_MAX);
