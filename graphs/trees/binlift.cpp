@@ -1,7 +1,7 @@
 
 grid binlift(grid &edg, vi par){
   ll cn=edg.size(), kk=log2(cn);
-  grid bl(k+1, vi(cn, 0));
+  grid bl(kk+1, vi(cn, 0));
 
   fir(cn) for(ll to: edg[i]){
     if(par[to]==i) bl[0][to]=i;
