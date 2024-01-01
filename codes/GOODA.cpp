@@ -135,9 +135,9 @@ void solve(){
   }
 
   vi topsort = wtsort(comgph);
-  vi shortd = sssd(comgph, topsort, s);
+  vi shortd = sssd(comgph, topsort, sc[s]);
 
-  cout<<fun[s]-shortd[sc[e]]<<"\n";
+  cout<<fun[sc[s]]-shortd[sc[e]]<<"\n";
   
   return;
 }
