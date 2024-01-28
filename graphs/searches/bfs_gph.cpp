@@ -3,9 +3,8 @@ ll bfs(grid &edg, ll sn){
   ll cn=edg.size(), lv=-1, cl=0, nl=1, at, ls;
   vi vst(cn+1, 0), prt(cn+1, -1);
   queue<ll> call;
-  call.push(sn);
+  call.push(sn); vst[sn]++;
   while(!call.empty()){
-    vst[sn]++;
     if(!cl){
       lv++; cl=nl; nl=0;
     }
