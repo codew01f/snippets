@@ -1,24 +1,20 @@
 
-vi sssd(vector<vector<pii>> &edg, ll s){ //dijkstras' alg
-  ll cn=edg.size();
-  vi dis(cn, INT_MAX);
-  dis[s]=0;
-  vi vst(cn, 0);
-  priority_queue<pii, vector<pii>, greater<pii>> call;
+vi sssd(vector<vector<pii>> edg, ll sn){ //dijkstras' alg
+  vi ssd(edg.size(), LLONG_MAX), vis(edg.size(), 0);
+  priority_queue<pii> cll;
+  ssd[sn]=0; cll.push({0, sn});
 
-  call.push({0, s});
-  while(!call.empty()){
-    auto [wt0, at]=call.top();
-    call.pop();
-    vst[at]++;
-    for(auto [to, wt]:edg[at]){
-      if(vst[to]) continue;
-      ll d=dis[at]+wt;
-      if(d<dis[to]){
-        dis[to]=d;
-        call.push({d, to});
+  while(!cll.empty()){
+    auto [wt0, at]=cll.top(); cll.pop(); vis[at]=1;
+    if(-wt0>ssd[at]) continue;
+    for(auto [to, wt]: edg[at]){
+      ll d=wt+ssd[at];
+      if(d<ssd[to]){
+        ssd[to]=d;
+        cll.push({-d, to});
       }
     }
   }
-  return dis;
+  return ssd;
 }
+
