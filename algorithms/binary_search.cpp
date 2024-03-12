@@ -1,6 +1,6 @@
 
 ll bs(vi &v, ll t){ // lower
-  int l=0, r=v.size();
+  int l=0, r=v.size(); //add check cz ans might be out of bound.
 
   while(l<r){
     int m = mid(l, r);
